@@ -2,6 +2,5 @@ streamlit
 pandas
 numpy
 requests
-fpdf2
+reportlab
 python-dotenv
-fpdf
