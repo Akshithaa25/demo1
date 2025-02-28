@@ -1,4 +1,4 @@
-from fpdf2 import FPDF
+#from fpdf2 import FPDF
 from fpdf import FPDF
 import streamlit as st
 import random
