@@ -4,6 +4,8 @@ import streamlit as st
 import random
 import pandas as pd
 import requests
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 st.set_page_config(page_title="AI Career Counselor", page_icon="🎯")
 
@@ -29,8 +31,7 @@ extracurriculars = st.text_area("List Extracurricular Activities (comma separate
 if st.button("Save Profile"):
     st.success(f"Profile saved for {name}! 🚀")
 
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+# resume generator
 
 def generate_resume(name, email, phone, linkedin, github, education, university, cgpa, experience, skills, certifications, extracurriculars, career_goal):
     pdf_output = "resume.pdf"
