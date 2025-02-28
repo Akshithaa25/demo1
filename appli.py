@@ -11,10 +11,18 @@ st.title("🎯 AI-Powered Virtual Career Counselor")
 # Section 1: User Profile Management
 st.header("👤 User Profile")
 name = st.text_input("Enter your Name:")
+email = st.text_input("Enter your Email:")
+phone = st.text_input("Enter your Phone Number:")
+linkedin = st.text_input("LinkedIn Profile URL:")
+github = st.text_input("GitHub Profile URL:")
 education = st.selectbox("Highest Education Level:", ["High School", "Bachelor's", "Master's", "PhD"])
+university = st.text_input("University Name:")
+cgpa = st.text_input("Your CGPA (Optional):")
 experience = st.slider("Years of Work Experience:", 0, 30, 0)
 skills = st.text_area("List your skills (comma separated):")
 career_goal = st.text_input("Your Dream Job:")
+certifications = st.text_area("List Certifications (comma separated):")
+extracurriculars = st.text_area("List Extracurricular Activities (comma separated):")
 
 if st.button("Save Profile"):
     st.success(f"Profile saved for {name}! 🚀")
