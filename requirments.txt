@@ -4,3 +4,4 @@ numpy
 requests
 fpdf2
 python-dotenv
+fpdf
