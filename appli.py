@@ -1,5 +1,5 @@
 #from fpdf2 import FPDF
-from fpdf import FPDF
+#from fpdf import FPDF
 import streamlit as st
 import random
 import pandas as pd
@@ -29,68 +29,44 @@ extracurriculars = st.text_area("List Extracurricular Activities (comma separate
 if st.button("Save Profile"):
     st.success(f"Profile saved for {name}! 🚀")
 
-# Section 2: Resume & Cover Letter Generator
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 def generate_resume(name, email, phone, linkedin, github, education, university, cgpa, experience, skills, certifications, extracurriculars, career_goal):
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.add_page()
+    pdf_output = "resume.pdf"
+    c = canvas.Canvas(pdf_output, pagesize=letter)
     
     # Title
-    pdf.set_font("Arial", "B", 16)
-    pdf.cell(200, 10, f"{name}'s Resume", ln=True, align='C')
-    pdf.ln(10)
-
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(200, 750, f"{name}'s Resume")
+    
     # Contact Information
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, f"📧 {email}  |  📞 {phone}  |  🌐 {linkedin}  |  💻 {github}", align="C")
-    pdf.ln(8)
+    c.setFont("Helvetica", 12)
+    c.drawString(50, 730, f"📧 {email} | 📞 {phone} | 🌐 {linkedin} | 💻 {github}")
+    
+    # Sections
+    y_position = 700
+    
+    def add_section(title, content):
+        nonlocal y_position
+        y_position -= 30
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(50, y_position, title)
+        y_position -= 15
+        c.setFont("Helvetica", 12)
+        for line in content.split("\n"):
+            c.drawString(50, y_position, line)
+            y_position -= 15
 
-    # Education
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, "🎓 Education", ln=True)
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, f"{education} at {university} (CGPA: {cgpa})")
-    pdf.ln(5)
+    # Add all sections
+    add_section("🎓 Education", f"{education} at {university} (CGPA: {cgpa})")
+    add_section("💼 Experience", f"{experience} years in {career_goal}")
+    add_section("🛠️ Skills", skills)
+    add_section("📜 Certifications", certifications)
+    add_section("🎭 Extracurricular Activities", extracurriculars)
+    add_section("🎯 Career Goal", career_goal)
 
-    # Experience
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, "💼 Experience", ln=True)
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, f"{experience} years of experience in {career_goal}")
-    pdf.ln(5)
-
-    # Skills
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, "🛠️ Skills", ln=True)
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, skills)
-    pdf.ln(5)
-
-    # Certifications
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, "📜 Certifications", ln=True)
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, certifications)
-    pdf.ln(5)
-
-    # Extracurriculars
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, "🎭 Extracurricular Activities", ln=True)
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, extracurriculars)
-    pdf.ln(5)
-
-    # Career Goal
-    pdf.set_font("Arial", "B", 14)
-    pdf.cell(0, 10, "🎯 Career Goal", ln=True)
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, career_goal)
-    pdf.ln(5)
-
-    # Save PDF
-    pdf_output = "resume.pdf"
-    pdf.output(pdf_output)
+    c.save()
     return pdf_output
 
 st.header("📄 Resume Generator")
@@ -100,14 +76,7 @@ if st.button("Generate Resume"):
     st.success("✅ Resume Generated Successfully!")
     with open(resume_file, "rb") as file:
         st.download_button(label="📥 Download Resume", data=file, file_name="My_Resume.pdf", mime="application/pdf")
-# Section 3: Skill Enhancement & Course Recommendations
-st.header("📚 Skill Enhancement & Course Recommendations")
-if skills:
-    st.write("🔍 Searching for courses based on your skills...")
-    # Simulated Course Recommendations
-    recommended_courses = ["Python for Data Science", "Machine Learning Basics", "Project Management"]
-    for course in recommended_courses:
-        st.markdown(f"- 📌 {course}")
+
 
 # Section 4: Mock Interview Simulator
 st.header("🎤 Mock Interview Simulator")
