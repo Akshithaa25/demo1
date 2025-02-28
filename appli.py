@@ -28,17 +28,76 @@ if st.button("Save Profile"):
     st.success(f"Profile saved for {name}! 🚀")
 
 # Section 2: Resume & Cover Letter Generator
-st.header("📄 Resume & Cover Letter Generator")
-resume_template = f"""
-**Name:** {name}
-**Education:** {education}
-**Experience:** {experience} years
-**Skills:** {skills}
-**Career Goal:** {career_goal}
-"""
-if st.button("Generate Resume"):
-    st.text_area("Your AI-Generated Resume:", resume_template, height=150)
 
+def generate_resume(name, email, phone, linkedin, github, education, university, cgpa, experience, skills, certifications, extracurriculars, career_goal):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    
+    # Title
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, f"{name}'s Resume", ln=True, align='C')
+    pdf.ln(10)
+
+    # Contact Information
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 8, f"📧 {email}  |  📞 {phone}  |  🌐 {linkedin}  |  💻 {github}", align="C")
+    pdf.ln(8)
+
+    # Education
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "🎓 Education", ln=True)
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 8, f"{education} at {university} (CGPA: {cgpa})")
+    pdf.ln(5)
+
+    # Experience
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "💼 Experience", ln=True)
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 8, f"{experience} years of experience in {career_goal}")
+    pdf.ln(5)
+
+    # Skills
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "🛠️ Skills", ln=True)
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 8, skills)
+    pdf.ln(5)
+
+    # Certifications
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "📜 Certifications", ln=True)
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 8, certifications)
+    pdf.ln(5)
+
+    # Extracurriculars
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "🎭 Extracurricular Activities", ln=True)
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 8, extracurriculars)
+    pdf.ln(5)
+
+    # Career Goal
+    pdf.set_font("Arial", "B", 14)
+    pdf.cell(0, 10, "🎯 Career Goal", ln=True)
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 8, career_goal)
+    pdf.ln(5)
+
+    # Save PDF
+    pdf_output = "resume.pdf"
+    pdf.output(pdf_output)
+    return pdf_output
+
+st.header("📄 Resume Generator")
+
+if st.button("Generate Resume"):
+    resume_file = generate_resume(name, email, phone, linkedin, github, education, university, cgpa, experience, skills, certifications, extracurriculars, career_goal)
+    st.success("✅ Resume Generated Successfully!")
+    with open(resume_file, "rb") as file:
+        st.download_button(label="📥 Download Resume", data=file, file_name="My_Resume.pdf", mime="application/pdf")
 # Section 3: Skill Enhancement & Course Recommendations
 st.header("📚 Skill Enhancement & Course Recommendations")
 if skills:
